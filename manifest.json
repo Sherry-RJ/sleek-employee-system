@@ -1,0 +1,21 @@
+{
+  "name": "Sleek Operations Hub",
+  "short_name": "Sleek Hub",
+  "description": "Enterprise Employee Operations & Attendance System",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme-color": "#0f172a",
+  "icons": [
+    {
+      "src": "Sleek direct Logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "Sleek direct Logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
