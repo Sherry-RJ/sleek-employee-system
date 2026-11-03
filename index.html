@@ -3,67 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- PWA & Mobile Install Setup -->
-<link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Sleek Hub">
-<link rel="apple-touch-icon" href="Sleek direct Logo.png">
-<meta name="theme-color" content="#0f172a">
     <title>Sleek Operations Hub</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- PWA & Mobile Install Setup -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sleek Hub">
+    <link rel="apple-touch-icon" href="Sleek direct Logo.png">
     <link rel="icon" type="image/png" href="Sleek direct Logo.png">
+    <meta name="theme-color" content="#e0e8f9">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Claymorphism Custom Shadows & Styling */
+        body {
+            background-color: #e6edf8;
+            color: #2d3748;
+        }
+        .clay-card {
+            background: #eef2fd;
+            border-radius: 28px;
+            box-shadow: 10px 10px 20px #c5d0e6, -10px -10px 20px #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .clay-card-sm {
+            background: #eef2fd;
+            border-radius: 20px;
+            box-shadow: 6px 6px 12px #c5d0e6, -6px -6px 12px #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .clay-button {
+            background: #4f46e5;
+            color: #ffffff;
+            border-radius: 18px;
+            box-shadow: 5px 5px 10px #c5d0e6, -5px -5px 10px #ffffff;
+            transition: all 0.2s ease;
+        }
+        .clay-button:active {
+            transform: translateY(2px);
+            box-shadow: 2px 2px 5px #c5d0e6, -2px -2px 5px #ffffff;
+        }
+        .clay-input {
+            background: #e2e8f6;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: inset 3px 3px 6px #cbd5e8, inset -3px -3px 6px #ffffff;
+            color: #1a202c;
+        }
+        .clay-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        /* Custom scrollbar hiding for clean mobile tabs */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col relative">
+<body class="font-sans min-h-screen flex flex-col relative">
 
     <!-- Toast Notification Banner -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-slate-800 border border-slate-700 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-3">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 clay-card text-slate-800 px-6 py-4 flex items-center space-x-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
         <div>
-            <div id="toastTitle" class="font-bold text-sm">Notification</div>
-            <div id="toastMsg" class="text-xs text-slate-400">Action completed successfully.</div>
+            <div id="toastTitle" class="font-bold text-sm text-slate-900">Notification</div>
+            <div id="toastMsg" class="text-xs text-slate-600">Action completed successfully.</div>
         </div>
     </div>
 
     <!-- Admin Review Request Modal -->
-    <div id="reviewRequestModal" class="hidden fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-lg w-full p-8 border border-slate-800">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
-                <h3 class="text-lg font-bold text-indigo-400"><i class="fa-solid fa-envelope-open-text mr-2"></i> Review Employee Request</h3>
-                <button onclick="closeReviewModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <div id="reviewRequestModal" class="hidden fixed inset-0 bg-slate-950/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="clay-card max-w-lg w-full p-6 sm:p-8">
+            <div class="flex items-center justify-between border-b border-slate-300/60 pb-4 mb-4">
+                <h3 class="text-lg font-bold text-indigo-600"><i class="fa-solid fa-envelope-open-text mr-2"></i> Review Request</h3>
+                <button onclick="closeReviewModal()" class="text-slate-500 hover:text-slate-900"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="saveRequestReview(event)" class="space-y-4">
                 <input type="hidden" id="reviewRowIndex">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Employee Email</label>
-                    <input type="text" id="reviewEmail" disabled class="w-full px-4 py-2.5 rounded-xl bg-slate-800/50 border border-slate-700 text-slate-300 text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Employee Email</label>
+                    <input type="text" id="reviewEmail" disabled class="w-full px-4 py-2.5 clay-input text-slate-600 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Request Type</label>
-                    <input type="text" id="reviewType" disabled class="w-full px-4 py-2.5 rounded-xl bg-slate-800/50 border border-slate-700 text-slate-300 text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Request Type</label>
+                    <input type="text" id="reviewType" disabled class="w-full px-4 py-2.5 clay-input text-slate-600 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Message / Details</label>
-                    <textarea id="reviewDetails" disabled rows="3" class="w-full px-4 py-2.5 rounded-xl bg-slate-800/50 border border-slate-700 text-slate-300 text-sm"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Approval Decision</label>
-                        <select id="reviewStatus" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
-                            <option value="Approved">Approve</option>
-                            <option value="Rejected">Reject</option>
-                            <option value="Pending">Pending</option>
-                            <option value="None">None</option>
-                        </select>
-                    </div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Message / Details</label>
+                    <textarea id="reviewDetails" disabled rows="2" class="w-full px-4 py-2.5 clay-input text-slate-600 text-sm"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Admin / CEO Comments / Reply</label>
-                    <textarea id="reviewComments" rows="3" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm" placeholder="Write your comments or feedback here..."></textarea>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Approval Decision</label>
+                    <select id="reviewStatus" class="w-full px-3 py-2.5 clay-input text-slate-800 text-sm">
+                        <option value="Approved">Approve</option>
+                        <option value="Rejected">Reject</option>
+                        <option value="Pending">Pending</option>
+                        <option value="None">None</option>
+                    </select>
                 </div>
-                <button type="submit" id="saveReviewBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition cursor-pointer shadow-lg shadow-indigo-600/30">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Admin / CEO Comments / Reply</label>
+                    <textarea id="reviewComments" rows="2" class="w-full px-4 py-2.5 clay-input text-slate-800 text-sm" placeholder="Write feedback..."></textarea>
+                </div>
+                <button type="submit" id="saveReviewBtn" class="w-full py-3 clay-button font-medium text-sm cursor-pointer">
                     Save Decision & Reply
                 </button>
             </form>
@@ -71,34 +120,34 @@
     </div>
 
     <!-- Admin Edit Time Modal -->
-    <div id="editLogModal" class="hidden fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-800">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
-                <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-pen-to-square mr-2"></i> Edit Shift & Holiday Override</h3>
-                <button onclick="closeEditModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <div id="editLogModal" class="hidden fixed inset-0 bg-slate-950/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="clay-card max-w-md w-full p-6 sm:p-8">
+            <div class="flex items-center justify-between border-b border-slate-300/60 pb-4 mb-4">
+                <h3 class="text-lg font-bold text-amber-600"><i class="fa-solid fa-pen-to-square mr-2"></i> Edit Shift & PTO</h3>
+                <button onclick="closeEditModal()" class="text-slate-500 hover:text-slate-900"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form onsubmit="saveLogEdit(event)" class="space-y-4">
+            <form onsubmit="saveLogEdit(event)" class="space-y-3">
                 <input type="hidden" id="editRowIndex">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Clock In Time (HH:mm:ss)</label>
-                    <input type="text" id="editClockIn" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Clock In (HH:mm:ss)</label>
+                    <input type="text" id="editClockIn" class="w-full px-4 py-2 clay-input text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Break Start Time (HH:mm:ss)</label>
-                    <input type="text" id="editBreakStart" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Break Start (HH:mm:ss)</label>
+                    <input type="text" id="editBreakStart" class="w-full px-4 py-2 clay-input text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Break End Time (HH:mm:ss)</label>
-                    <input type="text" id="editBreakEnd" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Break End (HH:mm:ss)</label>
+                    <input type="text" id="editBreakEnd" class="w-full px-4 py-2 clay-input text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Clock Out Time (HH:mm:ss)</label>
-                    <input type="text" id="editClockOut" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Clock Out (HH:mm:ss)</label>
+                    <input type="text" id="editClockOut" class="w-full px-4 py-2 clay-input text-sm">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Shift Status</label>
-                        <select id="editStatus" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
+                        <select id="editStatus" class="w-full px-3 py-2 clay-input text-sm">
                             <option value="Working">Working</option>
                             <option value="On Break">On Break</option>
                             <option value="Completed">Completed</option>
@@ -106,11 +155,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Manual Total Hours</label>
-                        <input type="text" id="editManualHours" placeholder="e.g. 8.00" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Manual Hours</label>
+                        <input type="text" id="editManualHours" placeholder="8.00" class="w-full px-3 py-2 clay-input text-sm">
                     </div>
                 </div>
-                <button type="submit" id="saveEditBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 rounded-xl transition cursor-pointer">
+                <button type="submit" id="saveEditBtn" class="w-full py-3 bg-amber-600 text-white rounded-xl shadow-md font-medium text-sm cursor-pointer mt-2">
                     Save Shift Adjustments
                 </button>
             </form>
@@ -118,89 +167,89 @@
     </div>
 
     <!-- Admin Add Manual Attendance Modal -->
-    <div id="addLogModal" class="hidden fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-800">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
-                <h3 class="text-lg font-bold text-emerald-400"><i class="fa-solid fa-plus-circle mr-2"></i> Add Manual Attendance / PTO</h3>
-                <button onclick="closeAddModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <div id="addLogModal" class="hidden fixed inset-0 bg-slate-950/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="clay-card max-w-md w-full p-6 sm:p-8">
+            <div class="flex items-center justify-between border-b border-slate-300/60 pb-4 mb-4">
+                <h3 class="text-lg font-bold text-emerald-600"><i class="fa-solid fa-plus-circle mr-2"></i> Add Attendance / PTO</h3>
+                <button onclick="closeAddModal()" class="text-slate-500 hover:text-slate-900"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form onsubmit="saveNewLog(event)" class="space-y-4">
+            <form onsubmit="saveNewLog(event)" class="space-y-3">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Select Employee Email</label>
-                    <select id="addEmail" required class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Employee Email</label>
+                    <select id="addEmail" required class="w-full px-4 py-2 clay-input text-sm">
                         <!-- Populated dynamically -->
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Date (YYYY-MM-DD)</label>
-                    <input type="date" id="addDate" required class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Date (YYYY-MM-DD)</label>
+                    <input type="date" id="addDate" required class="w-full px-4 py-2 clay-input text-sm">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Clock In (HH:mm:ss)</label>
-                        <input type="text" id="addClockIn" placeholder="09:00:00" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Clock In</label>
+                        <input type="text" id="addClockIn" placeholder="09:00:00" class="w-full px-3 py-2 clay-input text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Clock Out (HH:mm:ss)</label>
-                        <input type="text" id="addClockOut" placeholder="17:00:00" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Break Start</label>
-                        <input type="text" id="addBreakStart" placeholder="13:00:00" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Break End</label>
-                        <input type="text" id="addBreakEnd" placeholder="14:00:00" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Clock Out</label>
+                        <input type="text" id="addClockOut" placeholder="17:00:00" class="w-full px-3 py-2 clay-input text-sm">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Status / Type</label>
-                        <select id="addStatus" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
-                            <option value="Completed">Completed Shift</option>
-                            <option value="Holiday / Paid Off">Holiday / Paid Time Off</option>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Break Start</label>
+                        <input type="text" id="addBreakStart" placeholder="13:00:00" class="w-full px-3 py-2 clay-input text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Break End</label>
+                        <input type="text" id="addBreakEnd" placeholder="14:00:00" class="w-full px-3 py-2 clay-input text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
+                        <select id="addStatus" class="w-full px-3 py-2 clay-input text-sm">
+                            <option value="Completed">Completed</option>
+                            <option value="Holiday / Paid Off">Holiday / PTO</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Manual Hours Override</label>
-                        <input type="text" id="addManualHours" placeholder="e.g. 8.00" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Hours Override</label>
+                        <input type="text" id="addManualHours" placeholder="8.00" class="w-full px-3 py-2 clay-input text-sm">
                     </div>
                 </div>
-                <button type="submit" id="saveAddBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 rounded-xl transition cursor-pointer">
-                    Insert Attendance Record
+                <button type="submit" id="saveAddBtn" class="w-full py-3 bg-emerald-600 text-white rounded-xl shadow-md font-medium text-sm cursor-pointer mt-2">
+                    Insert Record
                 </button>
             </form>
         </div>
     </div>
 
     <!-- Auth / Login Screen -->
-    <div id="authModal" class="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-800">
+    <div id="authModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="clay-card max-w-md w-full p-8">
             <div class="text-center mb-6">
-                <div class="bg-indigo-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-indigo-500/30">
+                <div class="w-16 h-16 rounded-3xl bg-indigo-600 text-white flex items-center justify-center mx-auto mb-3 shadow-lg shadow-indigo-500/30">
                     <i class="fa-solid fa-shield-halved text-2xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-white">Sleek Operations Hub</h2>
-                <p class="text-xs text-indigo-400 mt-1">Enterprise Operations Portal</p>
+                <h2 class="text-2xl font-extrabold text-slate-900">Sleek Operations Hub</h2>
+                <p class="text-xs text-indigo-600 font-semibold mt-1">Enterprise Operations Portal</p>
             </div>
             
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Company Email</label>
-                    <input type="email" id="loginEmail" required class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none" value="gulshair@sleek.direct">
+                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Company Email</label>
+                    <input type="email" id="loginEmail" required class="w-full px-4 py-3 clay-input text-sm" value="gulshair@sleek.direct">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Password</label>
-                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none" value="admin123">
+                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Password</label>
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 clay-input text-sm" value="admin123">
                 </div>
-                <button type="submit" id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition shadow-lg shadow-indigo-600/30 cursor-pointer">
+                <button type="submit" id="loginBtn" class="w-full py-3.5 clay-button font-medium text-sm cursor-pointer shadow-lg shadow-indigo-500/30">
                     Sign In Securely
                 </button>
             </form>
-            <div class="mt-6 pt-4 border-t border-slate-800 text-center text-xs text-slate-500">
-                Default Master Admin: <span class="text-indigo-400">gulshair@sleek.direct</span> / <span class="text-indigo-400">admin123</span>
+            <div class="mt-6 pt-4 border-t border-slate-300/60 text-center text-xs text-slate-500">
+                Default Admin: <span class="text-indigo-600 font-medium">gulshair@sleek.direct</span> / <span class="text-indigo-600 font-medium">admin123</span>
             </div>
         </div>
     </div>
@@ -208,97 +257,97 @@
     <!-- Main App Container -->
     <div id="appContainer" class="hidden flex-1 flex flex-col">
         <!-- Top Navbar -->
-        <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-30">
+        <header class="bg-[#eef2fd] border-b border-slate-300/60 sticky top-0 z-30 shadow-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-md">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-2xl flex items-center justify-center font-bold shadow-md shrink-0">
                         <i class="fa-solid fa-cube"></i>
                     </div>
-                    <div>
-                        <h1 class="font-bold text-white leading-tight">Sleek Operations Hub</h1>
-                        <p class="text-xs text-indigo-400" id="userRoleDisplay">Employee Portal</p>
+                    <div class="truncate">
+                        <h1 class="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">Sleek Operations Hub</h1>
+                        <p class="text-[11px] text-indigo-600 font-medium truncate" id="userRoleDisplay">Employee Portal</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-xs font-medium text-slate-300 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700" id="currentUserBadge"></span>
-                    <button onclick="logout()" class="text-xs text-red-400 hover:text-red-300 font-medium px-3 py-1.5 rounded-lg hover:bg-red-500/10 transition cursor-pointer">
-                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out
+                <div class="flex items-center space-x-2 sm:space-x-4 shrink-0">
+                    <span class="text-xs font-medium text-slate-700 bg-[#e2e8f6] px-3 py-1.5 rounded-full border border-slate-300/60 shadow-inner max-w-[140px] sm:max-w-none truncate" id="currentUserBadge"></span>
+                    <button onclick="logout()" class="text-xs text-red-500 hover:text-red-700 font-semibold px-2.5 py-1.5 rounded-xl hover:bg-red-500/10 transition cursor-pointer">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i><span>Sign Out</span>
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- Navigation Tabs -->
-        <div class="bg-slate-900/50 border-b border-slate-800 backdrop-blur-md">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-8 overflow-x-auto">
-                <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn py-4 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 flex items-center space-x-2 cursor-pointer whitespace-nowrap">
+        <div class="bg-[#eef2fd]/80 border-b border-slate-300/60 backdrop-blur-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 overflow-x-auto no-scrollbar">
+                <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn py-4 text-xs sm:text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0">
                     <i class="fa-solid fa-clock-rotate-left"></i><span>Attendance</span>
                 </button>
-                <button onclick="switchTab('requests')" id="tab-requests" class="tab-btn py-4 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer whitespace-nowrap">
+                <button onclick="switchTab('requests')" id="tab-requests" class="tab-btn py-4 text-xs sm:text-sm font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0">
                     <i class="fa-solid fa-envelope-open-text"></i><span>Request Center</span>
                 </button>
-                <button onclick="switchTab('library')" id="tab-library" class="tab-btn py-4 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer whitespace-nowrap">
+                <button onclick="switchTab('library')" id="tab-library" class="tab-btn py-4 text-xs sm:text-sm font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0">
                     <i class="fa-solid fa-book-open"></i><span>Digital Library & Comics</span>
                 </button>
-                <button onclick="switchTab('admin')" id="tab-admin" class="tab-btn hidden py-4 text-sm font-medium border-b-2 border-transparent text-amber-400 hover:text-amber-300 flex items-center space-x-2 cursor-pointer whitespace-nowrap">
+                <button onclick="switchTab('admin')" id="tab-admin" class="tab-btn hidden py-4 text-xs sm:text-sm font-medium border-b-2 border-transparent text-amber-600 hover:text-amber-700 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0">
                     <i class="fa-solid fa-user-shield"></i><span>Admin & CEO Panel</span>
                 </button>
             </div>
         </div>
 
         <!-- Main Content Area -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full space-y-8">
             
             <!-- ATTENDANCE TAB -->
             <div id="content-attendance" class="space-y-6">
-                <div class="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-3xl p-8 border border-indigo-500/20 shadow-xl flex flex-col md:flex-row items-center justify-between">
+                <div class="clay-card p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between">
                     <div>
-                        <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-indigo-500/30">Shift Status Hub</span>
-                        <h2 class="text-3xl font-extrabold text-white mt-3">Live Time Tracker</h2>
-                        <p class="text-slate-300 text-sm mt-1">Record your shifts, breaks, and checkout times securely.</p>
+                        <span class="bg-indigo-500/10 text-indigo-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-indigo-500/20">Shift Status Hub</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">Live Time Tracker</h2>
+                        <p class="text-slate-600 text-xs sm:text-sm mt-1">Record your shifts, breaks, and checkout times securely.</p>
                     </div>
-                    <div class="mt-6 md:mt-0 bg-slate-900/80 backdrop-blur-md px-6 py-4 rounded-2xl border border-slate-700 text-center">
-                        <div class="text-xs uppercase tracking-wider text-slate-400">Current Status</div>
-                        <div class="text-lg font-bold mt-1 text-emerald-400" id="statusBadge">Checking...</div>
+                    <div class="mt-6 md:mt-0 clay-card-sm px-6 py-4 text-center w-full md:w-auto">
+                        <div class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Current Status</div>
+                        <div class="text-base sm:text-lg font-extrabold mt-1 text-emerald-600" id="statusBadge">Checking...</div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <button onclick="submitAttendance('clockIn')" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/10 transition text-left group cursor-pointer">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-business-time"></i></div>
-                        <h3 class="font-bold text-white text-lg">Clock In</h3>
-                        <p class="text-xs text-slate-400 mt-1">Start your working hours</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <button onclick="submitAttendance('clockIn')" class="clay-card p-6 hover:scale-[1.02] transition text-left group cursor-pointer">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-business-time"></i></div>
+                        <h3 class="font-bold text-slate-900 text-base">Clock In</h3>
+                        <p class="text-xs text-slate-500 mt-1">Start your working hours</p>
                     </button>
-                    <button onclick="submitAttendance('breakStart')" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-amber-500 hover:shadow-lg hover:shadow-amber-500/10 transition text-left group cursor-pointer">
-                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-mug-hot"></i></div>
-                        <h3 class="font-bold text-white text-lg">Start Break</h3>
-                        <p class="text-xs text-slate-400 mt-1">Take your meal or rest break</p>
+                    <button onclick="submitAttendance('breakStart')" class="clay-card p-6 hover:scale-[1.02] transition text-left group cursor-pointer">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-mug-hot"></i></div>
+                        <h3 class="font-bold text-slate-900 text-base">Start Break</h3>
+                        <p class="text-xs text-slate-500 mt-1">Take your meal or rest break</p>
                     </button>
-                    <button onclick="submitAttendance('breakEnd')" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 transition text-left group cursor-pointer">
-                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-play"></i></div>
-                        <h3 class="font-bold text-white text-lg">Resume Work</h3>
-                        <p class="text-xs text-slate-400 mt-1">End your break period</p>
+                    <button onclick="submitAttendance('breakEnd')" class="clay-card p-6 hover:scale-[1.02] transition text-left group cursor-pointer">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-play"></i></div>
+                        <h3 class="font-bold text-slate-900 text-base">Resume Work</h3>
+                        <p class="text-xs text-slate-500 mt-1">End your break period</p>
                     </button>
-                    <button onclick="submitAttendance('clockOut')" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-red-500 hover:shadow-lg hover:shadow-red-500/10 transition text-left group cursor-pointer">
-                        <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-right-from-bracket"></i></div>
-                        <h3 class="font-bold text-white text-lg">Clock Out</h3>
-                        <p class="text-xs text-slate-400 mt-1">End your workday</p>
+                    <button onclick="submitAttendance('clockOut')" class="clay-card p-6 hover:scale-[1.02] transition text-left group cursor-pointer">
+                        <div class="w-12 h-12 rounded-2xl bg-red-500/10 text-red-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition"><i class="fa-solid fa-right-from-bracket"></i></div>
+                        <h3 class="font-bold text-slate-900 text-base">Clock Out</h3>
+                        <p class="text-xs text-slate-500 mt-1">End your workday</p>
                     </button>
                 </div>
             </div>
 
             <!-- REQUEST CENTER TAB -->
             <div id="content-requests" class="hidden space-y-8">
-                <div class="bg-slate-900 rounded-3xl border border-slate-800 p-8 max-w-3xl mx-auto shadow-xl">
-                    <div class="border-b border-slate-800 pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-paper-plane mr-2 text-indigo-500"></i> Request Submission Center</h2>
-                        <p class="text-sm text-slate-400 mt-1">Submit leave or administrative requests securely.</p>
+                <div class="clay-card p-6 sm:p-8 max-w-3xl mx-auto">
+                    <div class="border-b border-slate-300/60 pb-5 mb-6">
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900"><i class="fa-solid fa-paper-plane mr-2 text-indigo-600"></i> Request Center</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Submit leave or administrative requests securely.</p>
                     </div>
-                    <form id="requestForm" onsubmit="submitRequest(event)" class="space-y-5">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <form id="requestForm" onsubmit="submitRequest(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Request Type</label>
-                                <select id="requestType" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Request Type</label>
+                                <select id="requestType" class="w-full px-4 py-3 clay-input text-sm">
                                     <option value="Leave Request">Leave / Time Off</option>
                                     <option value="Equipment Request">Equipment / Hardware</option>
                                     <option value="HR Inquiry">HR / General Support</option>
@@ -306,39 +355,39 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Manager Email</label>
-                                <input type="email" id="managerEmail" required class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none" value="gulshair@sleek.direct">
+                                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Manager Email</label>
+                                <input type="email" id="managerEmail" required class="w-full px-4 py-3 clay-input text-sm" value="gulshair@sleek.direct">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Explanation & Details</label>
-                            <textarea id="requestDetails" rows="4" required class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Provide dates, reasons, and specifics..."></textarea>
+                            <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Explanation & Details</label>
+                            <textarea id="requestDetails" rows="3" required class="w-full px-4 py-3 clay-input text-sm" placeholder="Provide dates, reasons, and specifics..."></textarea>
                         </div>
-                        <button type="submit" id="reqBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/30 cursor-pointer">
+                        <button type="submit" id="reqBtn" class="w-full py-3.5 clay-button font-medium text-sm cursor-pointer shadow-lg shadow-indigo-500/20">
                             Submit Secure Request
                         </button>
                     </form>
                 </div>
 
-                <div class="bg-slate-900 rounded-3xl border border-slate-800 p-8 max-w-4xl mx-auto shadow-xl">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-5 mb-6">
+                <div class="clay-card p-6 sm:p-8 max-w-4xl mx-auto">
+                    <div class="flex items-center justify-between border-b border-slate-300/60 pb-5 mb-6">
                         <div>
-                            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-clock-rotate-left mr-2 text-indigo-400"></i> My Submitted Requests & Admin Replies</h3>
-                            <p class="text-xs text-slate-400 mt-1">Track request status and read feedback/comments from management.</p>
+                            <h3 class="text-lg sm:text-xl font-bold text-slate-900"><i class="fa-solid fa-clock-rotate-left mr-2 text-indigo-600"></i> My Requests & Replies</h3>
+                            <p class="text-xs text-slate-500 mt-1">Track status and read manager feedback.</p>
                         </div>
-                        <button onclick="fetchEmployeeRequests()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3.5 py-2 rounded-xl border border-slate-700 text-slate-300 transition cursor-pointer flex items-center space-x-2">
+                        <button onclick="fetchEmployeeRequests()" class="clay-card-sm px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 transition cursor-pointer flex items-center space-x-2">
                             <i class="fa-solid fa-rotate"></i><span>Refresh</span>
                         </button>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-slate-300">
-                            <thead class="bg-slate-800 text-xs uppercase text-slate-400">
+                        <table class="w-full text-left text-sm text-slate-700 min-w-[550px]">
+                            <thead class="bg-[#dde4f6] text-xs uppercase text-slate-600">
                                 <tr>
                                     <th class="px-4 py-3 rounded-l-xl">Type</th>
                                     <th class="px-4 py-3">Details</th>
                                     <th class="px-4 py-3">Submitted At</th>
                                     <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3 rounded-r-xl">Admin / CEO Comments / Reply</th>
+                                    <th class="px-4 py-3 rounded-r-xl">Manager Reply</th>
                                 </tr>
                             </thead>
                             <tbody id="myRequestsTableBody">
@@ -349,37 +398,35 @@
                 </div>
             </div>
 
-            <!-- DIGITAL MULTI-PAGE LIBRARY TAB -->
+            <!-- DIGITAL LIBRARY TAB -->
             <div id="content-library" class="hidden space-y-6">
-                <!-- Header & Search -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-book-bookmark mr-2 text-indigo-500"></i> Corporate Library</h2>
-                        <p class="text-sm text-slate-400">Browse books, manuals, comics, and manga for breaks.</p>
+                        <h2 class="text-2xl font-bold text-slate-900"><i class="fa-solid fa-book-bookmark mr-2 text-indigo-600"></i> Corporate Library</h2>
+                        <p class="text-sm text-slate-600">Browse books, manuals, comics, and manga.</p>
                     </div>
-                    <input type="text" id="librarySearch" oninput="filterLibrary()" placeholder="Search title or author..." class="px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white w-full sm:w-72 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="text" id="librarySearch" oninput="filterLibrary()" placeholder="Search title or author..." class="px-4 py-2.5 clay-input text-sm w-full sm:w-72">
                 </div>
 
-                <!-- Section Navigation Pills (Books, Comics, Manga, etc.) -->
-                <div class="flex items-center space-x-2 border-b border-slate-800 pb-4 overflow-x-auto">
-                    <button onclick="setLibraryCategory('All')" id="catPill-All" class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-md transition cursor-pointer whitespace-nowrap">
+                <!-- Category Pills -->
+                <div class="flex items-center space-x-2 border-b border-slate-300/60 pb-4 overflow-x-auto no-scrollbar">
+                    <button onclick="setLibraryCategory('All')" id="catPill-All" class="px-4 py-2 rounded-2xl text-xs font-bold bg-indigo-600 text-white shadow-md transition cursor-pointer whitespace-nowrap shrink-0">
                         <i class="fa-solid fa-border-all mr-1.5"></i>All Catalog
                     </button>
-                    <button onclick="setLibraryCategory('Books')" id="catPill-Books" class="px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer whitespace-nowrap border border-slate-700">
-                        <i class="fa-solid fa-book mr-1.5 text-blue-400"></i>Books
+                    <button onclick="setLibraryCategory('Books')" id="catPill-Books" class="px-4 py-2 rounded-2xl text-xs font-medium clay-card-sm text-slate-700 hover:text-slate-900 transition cursor-pointer whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-book mr-1.5 text-blue-600"></i>Books
                     </button>
-                    <button onclick="setLibraryCategory('Comics')" id="catPill-Comics" class="px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer whitespace-nowrap border border-slate-700">
-                        <i class="fa-solid fa-mask-snorkel mr-1.5 text-amber-400"></i>Comics
+                    <button onclick="setLibraryCategory('Comics')" id="catPill-Comics" class="px-4 py-2 rounded-2xl text-xs font-medium clay-card-sm text-slate-700 hover:text-slate-900 transition cursor-pointer whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-mask-snorkel mr-1.5 text-amber-600"></i>Comics
                     </button>
-                    <button onclick="setLibraryCategory('Manga')" id="catPill-Manga" class="px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer whitespace-nowrap border border-slate-700">
-                        <i class="fa-solid fa-fire mr-1.5 text-red-400"></i>Manga
+                    <button onclick="setLibraryCategory('Manga')" id="catPill-Manga" class="px-4 py-2 rounded-2xl text-xs font-medium clay-card-sm text-slate-700 hover:text-slate-900 transition cursor-pointer whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-fire mr-1.5 text-red-600"></i>Manga
                     </button>
-                    <button onclick="setLibraryCategory('Manuals')" id="catPill-Manuals" class="px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer whitespace-nowrap border border-slate-700">
-                        <i class="fa-solid fa-file-pdf mr-1.5 text-emerald-400"></i>Docs & Manuals
+                    <button onclick="setLibraryCategory('Manuals')" id="catPill-Manuals" class="px-4 py-2 rounded-2xl text-xs font-medium clay-card-sm text-slate-700 hover:text-slate-900 transition cursor-pointer whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-file-pdf mr-1.5 text-emerald-600"></i>Manuals
                     </button>
                 </div>
 
-                <!-- Media Item Grid -->
                 <div id="libraryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <div class="text-center py-12 text-slate-500 col-span-full">Loading library catalog...</div>
                 </div>
@@ -389,74 +436,74 @@
             <div id="content-admin" class="hidden space-y-6">
                 
                 <!-- Live Executive Analytics Dashboard Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center space-x-4 shadow-lg">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="clay-card p-5 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl shadow-inner">
                             <i class="fa-solid fa-user-check"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-semibold uppercase text-slate-400">Clocked In Now</div>
-                            <div class="text-2xl font-extrabold text-white mt-0.5" id="statWorking">0</div>
+                            <div class="text-[11px] font-bold uppercase text-slate-500">Clocked In Now</div>
+                            <div class="text-2xl font-extrabold text-slate-900 mt-0.5" id="statWorking">0</div>
                         </div>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center space-x-4 shadow-lg">
-                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
+                    <div class="clay-card p-5 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-xl shadow-inner">
                             <i class="fa-solid fa-mug-hot"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-semibold uppercase text-slate-400">Currently On Break</div>
-                            <div class="text-2xl font-extrabold text-white mt-0.5" id="statBreak">0</div>
+                            <div class="text-[11px] font-bold uppercase text-slate-500">Currently On Break</div>
+                            <div class="text-2xl font-extrabold text-slate-900 mt-0.5" id="statBreak">0</div>
                         </div>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center space-x-4 shadow-lg">
-                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+                    <div class="clay-card p-5 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center text-xl shadow-inner">
                             <i class="fa-solid fa-users"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-semibold uppercase text-slate-400">Total Workforce</div>
-                            <div class="text-2xl font-extrabold text-white mt-0.5" id="statEmployees">0</div>
+                            <div class="text-[11px] font-bold uppercase text-slate-500">Total Workforce</div>
+                            <div class="text-2xl font-extrabold text-slate-900 mt-0.5" id="statEmployees">0</div>
                         </div>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center space-x-4 shadow-lg">
-                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
+                    <div class="clay-card p-5 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center text-xl shadow-inner">
                             <i class="fa-solid fa-envelope-open-text"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-semibold uppercase text-slate-400">Pending Requests</div>
-                            <div class="text-2xl font-extrabold text-white mt-0.5" id="statPending">0</div>
+                            <div class="text-[11px] font-bold uppercase text-slate-500">Pending Requests</div>
+                            <div class="text-2xl font-extrabold text-slate-900 mt-0.5" id="statPending">0</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Admin Sub-Navigation Menu -->
-                <div class="flex border-b border-slate-800 space-x-6 pb-2">
-                    <button onclick="switchAdminSubTab('sheet')" id="subtab-sheet" class="text-sm font-bold text-amber-400 border-b-2 border-amber-400 pb-2 flex items-center space-x-2 cursor-pointer">
+                <div class="flex border-b border-slate-300/60 space-x-6 pb-2 overflow-x-auto no-scrollbar">
+                    <button onclick="switchAdminSubTab('sheet')" id="subtab-sheet" class="text-xs sm:text-sm font-bold text-amber-600 border-b-2 border-amber-600 pb-2 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0">
                         <i class="fa-solid fa-calendar-check"></i><span>Monthly Attendance Sheet</span>
                     </button>
-                    <button onclick="switchAdminSubTab('provision')" id="subtab-provision" class="text-sm font-medium text-slate-400 hover:text-white pb-2 flex items-center space-x-2 cursor-pointer">
+                    <button onclick="switchAdminSubTab('provision')" id="subtab-provision" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 pb-2 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0">
                         <i class="fa-solid fa-user-plus"></i><span>Provision Team</span>
                     </button>
-                    <button onclick="switchAdminSubTab('messages')" id="subtab-messages" class="text-sm font-medium text-slate-400 hover:text-white pb-2 flex items-center space-x-2 cursor-pointer">
+                    <button onclick="switchAdminSubTab('messages')" id="subtab-messages" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 pb-2 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0">
                         <i class="fa-solid fa-comments"></i><span>Messages Team</span>
                     </button>
                 </div>
 
-                <!-- SUB-PAGE 1: MONTHLY ATTENDANCE SHEET & OVERTIME -->
+                <!-- SUB-PAGE 1: MONTHLY ATTENDANCE SHEET -->
                 <div id="adminSub-sheet" class="space-y-6">
-                    <div class="bg-slate-900 rounded-3xl border border-slate-800 p-8 shadow-xl">
+                    <div class="clay-card p-6 sm:p-8">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                             <div>
-                                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-calculator mr-2 text-indigo-400"></i> Monthly Employee Time & Overtime Sheet</h3>
-                                <p class="text-xs text-slate-400 mt-1">Exact calendar calculations (1st to end of month based on individual shift targets).</p>
+                                <h3 class="text-lg sm:text-xl font-bold text-slate-900"><i class="fa-solid fa-calculator mr-2 text-indigo-600"></i> Monthly Time & Overtime Sheet</h3>
+                                <p class="text-xs text-slate-500 mt-1">Calendar calculations based on individual shift targets.</p>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <label class="text-xs font-semibold uppercase text-slate-400">Select Month:</label>
-                                <input type="month" id="adminMonthPicker" onchange="loadAdminData()" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                                <label class="text-xs font-semibold uppercase text-slate-600">Month:</label>
+                                <input type="month" id="adminMonthPicker" onchange="loadAdminData()" class="px-3 py-2 clay-input text-xs w-full sm:w-auto">
                             </div>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm text-slate-300">
-                                <thead class="bg-slate-800 text-xs uppercase text-slate-400">
+                            <table class="w-full text-left text-sm text-slate-700 min-w-[600px]">
+                                <thead class="bg-[#dde4f6] text-xs uppercase text-slate-600">
                                     <tr>
                                         <th class="px-4 py-3 rounded-l-xl">Employee Email</th>
                                         <th class="px-4 py-3">Days Worked</th>
@@ -473,25 +520,25 @@
                         </div>
                     </div>
 
-                    <!-- Detailed Attendance Records Table -->
-                    <div class="bg-slate-900 rounded-3xl border border-slate-800 p-8 shadow-xl">
+                    <!-- Detailed Attendance Records -->
+                    <div class="clay-card p-6 sm:p-8">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                             <div>
-                                <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-table-list mr-2 text-indigo-400"></i> Detailed Shift Logs & Admin Override</h3>
-                                <p class="text-xs text-slate-400 mt-1">Click '+' to add manual attendance/PTO, or 'Edit' to adjust records.</p>
+                                <h3 class="text-lg sm:text-xl font-bold text-slate-900"><i class="fa-solid fa-table-list mr-2 text-indigo-600"></i> Detailed Shift Logs & Overrides</h3>
+                                <p class="text-xs text-slate-500 mt-1">Add manual attendance or edit existing records.</p>
                             </div>
-                            <div class="flex items-center space-x-3">
-                                <button onclick="openAddModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-4 py-2.5 rounded-xl font-semibold cursor-pointer transition flex items-center space-x-2 shadow-lg shadow-emerald-600/30">
-                                    <i class="fa-solid fa-plus text-sm"></i><span>Add Record</span>
+                            <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                                <button onclick="openAddModal()" class="bg-emerald-600 text-white text-xs px-4 py-2.5 rounded-xl font-semibold cursor-pointer transition shadow-md flex items-center space-x-2">
+                                    <i class="fa-solid fa-plus"></i><span>Add Record</span>
                                 </button>
-                                <button onclick="loadAdminData()" class="bg-slate-800 hover:bg-slate-700 text-xs px-4 py-2.5 rounded-xl border border-slate-700 cursor-pointer transition flex items-center space-x-2 text-slate-300">
-                                    <i class="fa-solid fa-rotate"></i><span>Refresh Sheet</span>
+                                <button onclick="loadAdminData()" class="clay-card-sm text-xs px-4 py-2.5 font-semibold text-slate-700 hover:text-slate-900 transition flex items-center space-x-2">
+                                    <i class="fa-solid fa-rotate"></i><span>Refresh</span>
                                 </button>
                             </div>
                         </div>
                         <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
-                            <table class="w-full text-left text-sm text-slate-300">
-                                <thead class="bg-slate-800 text-xs uppercase text-slate-400 sticky top-0">
+                            <table class="w-full text-left text-sm text-slate-700 min-w-[750px]">
+                                <thead class="bg-[#dde4f6] text-xs uppercase text-slate-600 sticky top-0">
                                     <tr>
                                         <th class="px-4 py-3">Email</th>
                                         <th class="px-4 py-3">Date</th>
@@ -500,7 +547,7 @@
                                         <th class="px-4 py-3">Break End</th>
                                         <th class="px-4 py-3">Clock Out</th>
                                         <th class="px-4 py-3">Status</th>
-                                        <th class="px-4 py-3">Shift Hours</th>
+                                        <th class="px-4 py-3">Hours</th>
                                         <th class="px-4 py-3">Action</th>
                                     </tr>
                                 </thead>
@@ -514,59 +561,59 @@
 
                 <!-- SUB-PAGE 2: PROVISION TEAM -->
                 <div id="adminSub-provision" class="hidden space-y-6">
-                    <div class="bg-slate-900 rounded-3xl border border-slate-800 p-8 max-w-3xl mx-auto shadow-xl">
-                        <div class="border-b border-slate-800 pb-5 mb-6">
-                            <h2 class="text-2xl font-bold text-amber-400"><i class="fa-solid fa-user-plus mr-2"></i> Provision Corporate User & Role</h2>
-                            <p class="text-sm text-slate-400 mt-1">Configure credentials, role permissions, and custom weekly shift schedules.</p>
+                    <div class="clay-card p-6 sm:p-8 max-w-3xl mx-auto">
+                        <div class="border-b border-slate-300/60 pb-5 mb-6">
+                            <h2 class="text-xl sm:text-2xl font-bold text-amber-600"><i class="fa-solid fa-user-plus mr-2"></i> Provision Corporate User</h2>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-1">Configure credentials, roles, and weekly shift schedules.</p>
                         </div>
                         <form id="createEmployeeForm" onsubmit="createEmployee(event)" class="space-y-6">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Full Name</label>
-                                    <input type="text" id="newEmpName" required class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none" placeholder="John Doe">
+                                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Full Name</label>
+                                    <input type="text" id="newEmpName" required class="w-full px-4 py-3 clay-input text-sm" placeholder="John Doe">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Company Email</label>
-                                    <input type="email" id="newEmpEmail" required class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none" placeholder="john@sleek.direct">
+                                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Company Email</label>
+                                    <input type="email" id="newEmpEmail" required class="w-full px-4 py-3 clay-input text-sm" placeholder="john@sleek.direct">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Password</label>
-                                    <input type="text" id="newEmpPass" required class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none" placeholder="Password">
+                                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Password</label>
+                                    <input type="text" id="newEmpPass" required class="w-full px-4 py-3 clay-input text-sm" placeholder="Password">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Access Role</label>
-                                    <select id="newEmpRole" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Access Role</label>
+                                    <select id="newEmpRole" class="w-full px-4 py-3 clay-input text-sm">
                                         <option value="Employee">Employee</option>
-                                        <option value="CEO">CEO (Admin Access)</option>
-                                        <option value="Admin">Admin (Admin Access)</option>
+                                        <option value="CEO">CEO</option>
+                                        <option value="Admin">Admin</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="border-t border-slate-800 pt-5">
-                                <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-calendar-week mr-2"></i> Full Week Time Slots & Off Days</h3>
+                            <div class="border-t border-slate-300/60 pt-5">
+                                <h3 class="text-xs sm:text-sm font-bold text-amber-600 uppercase tracking-wider mb-3"><i class="fa-solid fa-calendar-week mr-2"></i> Weekly Schedule & Off Days</h3>
                                 <div class="space-y-3" id="weeklyScheduleContainer">
                                     <!-- Injected via JS -->
                                 </div>
                             </div>
 
-                            <button type="submit" id="createEmpBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-3.5 rounded-xl transition shadow-lg shadow-amber-600/30 cursor-pointer">
-                                Provision Secure Account & Weekly Schedule
+                            <button type="submit" id="createEmpBtn" class="w-full py-3.5 bg-amber-600 text-white rounded-2xl shadow-lg font-medium text-sm cursor-pointer">
+                                Provision Account & Schedule
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <!-- SUB-PAGE 3: MESSAGES & REQUESTS TEAM -->
+                <!-- SUB-PAGE 3: MESSAGES TEAM -->
                 <div id="adminSub-messages" class="hidden space-y-6">
-                    <div class="bg-slate-900 rounded-3xl border border-slate-800 p-8 shadow-xl">
-                        <div class="border-b border-slate-800 pb-5 mb-6">
-                            <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-comments mr-2 text-indigo-400"></i> Team Messages & Requests Inbox</h2>
-                            <p class="text-sm text-slate-400 mt-1">Review leave inquiries and staff communications.</p>
+                    <div class="clay-card p-6 sm:p-8">
+                        <div class="border-b border-slate-300/60 pb-5 mb-6">
+                            <h2 class="text-xl sm:text-2xl font-bold text-slate-900"><i class="fa-solid fa-comments mr-2 text-indigo-600"></i> Team Messages Inbox</h2>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-1">Review leave inquiries and staff requests.</p>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm text-slate-300">
-                                <thead class="bg-slate-800 text-xs uppercase text-slate-400">
+                            <table class="w-full text-left text-sm text-slate-700 min-w-[650px]">
+                                <thead class="bg-[#dde4f6] text-xs uppercase text-slate-600">
                                     <tr>
                                         <th class="px-4 py-3 rounded-l-xl">Employee Email</th>
                                         <th class="px-4 py-3">Type</th>
@@ -628,30 +675,30 @@
             container.innerHTML = DAYS_OF_WEEK.map(day => {
                 const isSun = day === "Sunday";
                 return `
-                    <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60 grid grid-cols-1 sm:grid-cols-6 gap-3 items-center">
-                        <div class="font-bold text-white text-sm flex items-center justify-between sm:justify-start space-x-2">
+                    <div class="clay-card-sm p-3 grid grid-cols-1 sm:grid-cols-6 gap-3 items-center">
+                        <div class="font-bold text-slate-900 text-xs sm:text-sm flex items-center justify-between sm:justify-start space-x-2">
                             <span>${day}</span>
-                            <label class="flex items-center space-x-1 text-xs text-amber-400 cursor-pointer">
-                                <input type="checkbox" id="off_${day}" ${isSun ? 'checked' : ''} onchange="toggleDayOff('${day}')" class="rounded bg-slate-700 border-slate-600">
+                            <label class="flex items-center space-x-1 text-xs text-amber-600 cursor-pointer font-bold">
+                                <input type="checkbox" id="off_${day}" ${isSun ? 'checked' : ''} onchange="toggleDayOff('${day}')" class="rounded bg-[#e2e8f6] border-slate-400">
                                 <span>OFF</span>
                             </label>
                         </div>
                         <div id="inputs_${day}" class="sm:col-span-5 grid grid-cols-2 sm:grid-cols-4 gap-2 ${isSun ? 'opacity-40 pointer-events-none' : ''}">
                             <div>
-                                <label class="block text-[10px] text-slate-400 uppercase">Clock In</label>
-                                <input type="text" id="in_${day}" value="09:00" class="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs">
+                                <label class="block text-[10px] text-slate-500 uppercase font-semibold">Clock In</label>
+                                <input type="text" id="in_${day}" value="09:00" class="w-full px-2 py-1 clay-input text-xs">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-slate-400 uppercase">Clock Out</label>
-                                <input type="text" id="out_${day}" value="17:00" class="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs">
+                                <label class="block text-[10px] text-slate-500 uppercase font-semibold">Clock Out</label>
+                                <input type="text" id="out_${day}" value="17:00" class="w-full px-2 py-1 clay-input text-xs">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-slate-400 uppercase">Break (Mins)</label>
-                                <input type="number" id="break_${day}" value="60" class="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs">
+                                <label class="block text-[10px] text-slate-500 uppercase font-semibold">Break (Mins)</label>
+                                <input type="number" id="break_${day}" value="60" class="w-full px-2 py-1 clay-input text-xs">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-slate-400 uppercase">Target Hours</label>
-                                <input type="number" step="0.5" id="target_${day}" value="8" class="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs">
+                                <label class="block text-[10px] text-slate-500 uppercase font-semibold">Target Hrs</label>
+                                <input type="number" step="0.5" id="target_${day}" value="8" class="w-full px-2 py-1 clay-input text-xs">
                             </div>
                         </div>
                     </div>
@@ -673,9 +720,7 @@
             try {
                 const res = await fetch("https://api.ipify.org?format=json");
                 const data = await res.json();
-                if (data && data.ip) {
-                    currentUserIp = data.ip;
-                }
+                if (data && data.ip) currentUserIp = data.ip;
             } catch (err) {
                 currentUserIp = "Local / Office IP";
             }
@@ -683,13 +728,9 @@
 
         function showToast(title, message, isError = false) {
             const toast = document.getElementById("toast");
-            const toastTitle = document.getElementById("toastTitle");
-            const toastMsg = document.getElementById("toastMsg");
-            const toastIcon = document.getElementById("toastIcon");
-
-            toastTitle.innerText = title;
-            toastMsg.innerText = message;
-            toastIcon.className = isError ? "fa-solid fa-circle-exclamation text-red-400 text-lg" : "fa-solid fa-circle-check text-emerald-400 text-lg";
+            document.getElementById("toastTitle").innerText = title;
+            document.getElementById("toastMsg").innerText = message;
+            document.getElementById("toastIcon").className = isError ? "fa-solid fa-circle-exclamation text-red-500 text-lg" : "fa-solid fa-circle-check text-emerald-500 text-lg";
 
             toast.classList.remove("translate-y-32", "opacity-0");
             setTimeout(() => { toast.classList.add("translate-y-32", "opacity-0"); }, 3500);
@@ -716,7 +757,7 @@
                     sessionUser = res.data;
                     localStorage.setItem("hub_session", JSON.stringify(sessionUser));
                     initAppSession();
-                    showToast("Welcome Back", "Signed in securely.");
+                    showToast("Welcome Back", "Signed in successfully.");
                 } else {
                     showToast("Login Failed", res.message, true);
                 }
@@ -732,7 +773,7 @@
             document.getElementById("authModal").classList.add("hidden");
             document.getElementById("appContainer").classList.remove("hidden");
             document.getElementById("currentUserBadge").innerText = sessionUser.fullName + " (" + sessionUser.role + ")";
-            document.getElementById("userRoleDisplay").innerText = (sessionUser.role === "Admin" || sessionUser.role === "CEO") ? "Executive & Administrator Portal" : "Employee Portal";
+            document.getElementById("userRoleDisplay").innerText = (sessionUser.role === "Admin" || sessionUser.role === "CEO") ? "Executive Administrator Portal" : "Employee Portal";
 
             if (sessionUser.role === "Admin" || sessionUser.role === "CEO") {
                 document.getElementById("tab-admin").classList.remove("hidden");
@@ -748,11 +789,11 @@
             ['sheet', 'provision', 'messages'].forEach(s => {
                 document.getElementById(`adminSub-${s}`).classList.add('hidden');
                 const btn = document.getElementById(`subtab-${s}`);
-                btn.className = "text-sm font-medium text-slate-400 hover:text-white pb-2 flex items-center space-x-2 cursor-pointer";
+                btn.className = "text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 pb-2 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0";
             });
             document.getElementById(`adminSub-${sub}`).classList.remove('hidden');
             const activeBtn = document.getElementById(`subtab-${sub}`);
-            activeBtn.className = "text-sm font-bold text-amber-400 border-b-2 border-amber-400 pb-2 flex items-center space-x-2 cursor-pointer";
+            activeBtn.className = "text-xs sm:text-sm font-bold text-amber-600 border-b-2 border-amber-600 pb-2 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0";
         }
 
         async function fetchDashboardStats() {
@@ -767,7 +808,7 @@
                     document.getElementById("statPending").innerText = res.data.pendingRequests;
                 }
             } catch (err) {
-                console.error("Failed to load dashboard stats", err);
+                console.error("Failed to load stats", err);
             }
         }
 
@@ -793,33 +834,33 @@
                         summaryTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-4 text-center text-slate-500">No records found for selected month.</td></tr>`;
                     } else {
                         summaryTableBody.innerHTML = monthlySummary.map(m => `
-                            <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition">
-                                <td class="px-4 py-3 font-medium text-white">${m.email}</td>
+                            <tr class="border-b border-slate-200 hover:bg-[#e2e8f6]/50 transition">
+                                <td class="px-4 py-3 font-medium text-slate-900">${m.email}</td>
                                 <td class="px-4 py-3">${m.daysWorked} days</td>
-                                <td class="px-4 py-3 text-indigo-300 font-medium">${m.targetHours}</td>
-                                <td class="px-4 py-3 font-semibold text-emerald-400">${m.totalHours}</td>
-                                <td class="px-4 py-3 text-emerald-300 font-bold">${m.extraHours}</td>
-                                <td class="px-4 py-3 text-red-400 font-bold">${m.shortHours}</td>
+                                <td class="px-4 py-3 text-indigo-600 font-medium">${m.targetHours}</td>
+                                <td class="px-4 py-3 font-semibold text-emerald-600">${m.totalHours}</td>
+                                <td class="px-4 py-3 text-emerald-700 font-bold">${m.extraHours}</td>
+                                <td class="px-4 py-3 text-red-600 font-bold">${m.shortHours}</td>
                             </tr>
                         `).join('');
                     }
 
                     const logsTableBody = document.getElementById("adminLogsTableBody");
                     if (logs.length === 0) {
-                        logsTableBody.innerHTML = `<tr><td colspan="9" class="px-4 py-4 text-center text-slate-500">No attendance records found.</td></tr>`;
+                        logsTableBody.innerHTML = `<tr><td colspan="9" class="px-4 py-4 text-center text-slate-500">No records found.</td></tr>`;
                     } else {
                         logsTableBody.innerHTML = logs.map(l => `
-                            <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition">
-                                <td class="px-4 py-3 font-medium text-white">${l.email}</td>
-                                <td class="px-4 py-3 text-slate-300">${l.date}</td>
-                                <td class="px-4 py-3 text-emerald-400">${l.clockIn || '-'}</td>
-                                <td class="px-4 py-3 text-amber-400">${l.breakStart || '-'}</td>
-                                <td class="px-4 py-3 text-blue-400">${l.breakEnd || '-'}</td>
-                                <td class="px-4 py-3 text-red-400">${l.clockOut || '-'}</td>
-                                <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold ${l.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : l.status === 'Holiday / Paid Off' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' : 'bg-blue-500/10 text-blue-400 border border-blue-500/30'}">${l.status}</span></td>
-                                <td class="px-4 py-3 font-semibold text-white">${l.totalHours || '-'}</td>
+                            <tr class="border-b border-slate-200 hover:bg-[#e2e8f6]/50 transition">
+                                <td class="px-4 py-3 font-medium text-slate-900">${l.email}</td>
+                                <td class="px-4 py-3 text-slate-600">${l.date}</td>
+                                <td class="px-4 py-3 text-emerald-600">${l.clockIn || '-'}</td>
+                                <td class="px-4 py-3 text-amber-600">${l.breakStart || '-'}</td>
+                                <td class="px-4 py-3 text-blue-600">${l.breakEnd || '-'}</td>
+                                <td class="px-4 py-3 text-red-600">${l.clockOut || '-'}</td>
+                                <td class="px-4 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${l.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : l.status === 'Holiday / Paid Off' ? 'bg-purple-500/10 text-purple-600 border border-purple-500/20' : 'bg-blue-500/10 text-blue-600 border border-blue-500/20'}">${l.status}</span></td>
+                                <td class="px-4 py-3 font-semibold text-slate-900">${l.totalHours || '-'}</td>
                                 <td class="px-4 py-3">
-                                    <button onclick="openEditModal(${l.rowIndex}, '${l.clockIn}', '${l.breakStart}', '${l.breakEnd}', '${l.clockOut}', '${l.status}', '${l.totalHours}')" class="bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer border border-amber-500/30">
+                                    <button onclick="openEditModal(${l.rowIndex}, '${l.clockIn}', '${l.breakStart}', '${l.breakEnd}', '${l.clockOut}', '${l.status}', '${l.totalHours}')" class="bg-amber-500/20 hover:bg-amber-500 text-amber-700 hover:text-white px-3 py-1 rounded-xl text-xs font-semibold transition cursor-pointer border border-amber-500/30">
                                         <i class="fa-solid fa-pen mr-1"></i>Edit
                                     </button>
                                 </td>
@@ -832,15 +873,15 @@
                         reqTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-4 text-center text-slate-500">No messages found.</td></tr>`;
                     } else {
                         reqTableBody.innerHTML = requests.map(r => `
-                            <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition">
-                                <td class="px-4 py-3 font-medium text-white">${r.email}</td>
-                                <td class="px-4 py-3 text-indigo-400 font-semibold">${r.type}</td>
-                                <td class="px-4 py-3 text-slate-300">${r.details}</td>
+                            <tr class="border-b border-slate-200 hover:bg-[#e2e8f6]/50 transition">
+                                <td class="px-4 py-3 font-medium text-slate-900">${r.email}</td>
+                                <td class="px-4 py-3 text-indigo-600 font-semibold">${r.type}</td>
+                                <td class="px-4 py-3 text-slate-700">${r.details}</td>
                                 <td class="px-4 py-3 text-xs text-slate-500">${r.timestamp}</td>
-                                <td class="px-4 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${r.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : r.status === 'Rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">${r.status}</span></td>
+                                <td class="px-4 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${r.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : r.status === 'Rejected' ? 'bg-red-500/10 text-red-600 border border-red-500/20' : 'bg-amber-500/10 text-amber-600 border border-amber-500/20'}">${r.status}</span></td>
                                 <td class="px-4 py-3">
-                                    <button onclick="openReviewModal(${r.rowIndex}, '${r.email}', '${r.type}', '${r.details.replace(/'/g, "\\'")}', '${r.status}', '${(r.adminComments || '').replace(/'/g, "\\'")}')" class="bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer border border-indigo-500/30">
-                                        <i class="fa-solid fa-eye mr-1"></i>Review / Reply
+                                    <button onclick="openReviewModal(${r.rowIndex}, '${r.email}', '${r.type}', '${r.details.replace(/'/g, "\\'")}', '${r.status}', '${(r.adminComments || '').replace(/'/g, "\\'")}')" class="bg-indigo-600/20 hover:bg-indigo-600 text-indigo-700 hover:text-white px-3 py-1 rounded-xl text-xs font-semibold transition cursor-pointer border border-indigo-500/30">
+                                        <i class="fa-solid fa-eye mr-1"></i>Review
                                     </button>
                                 </td>
                             </tr>
@@ -861,25 +902,25 @@
                 if (res.status === "success" && res.data) {
                     const reqs = res.data;
                     if(reqs.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="5" class="px-4 py-4 text-center text-slate-500">You haven't submitted any requests yet.</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="5" class="px-4 py-4 text-center text-slate-500">No requests submitted yet.</td></tr>`;
                     } else {
                         tableBody.innerHTML = reqs.map(r => `
-                            <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition">
-                                <td class="px-4 py-3 font-semibold text-indigo-400">${r.type}</td>
-                                <td class="px-4 py-3 text-slate-300">${r.details}</td>
+                            <tr class="border-b border-slate-200 hover:bg-[#e2e8f6]/50 transition">
+                                <td class="px-4 py-3 font-semibold text-indigo-600">${r.type}</td>
+                                <td class="px-4 py-3 text-slate-700">${r.details}</td>
                                 <td class="px-4 py-3 text-xs text-slate-500">${r.timestamp}</td>
                                 <td class="px-4 py-3">
-                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${r.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : r.status === 'Rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${r.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : r.status === 'Rejected' ? 'bg-red-500/10 text-red-600 border border-red-500/20' : 'bg-amber-500/10 text-amber-600 border border-amber-500/20'}">
                                         ${r.status}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-slate-200 text-xs">${r.adminComments ? `<span class="bg-indigo-950/60 border border-indigo-500/30 px-3 py-1.5 rounded-xl block text-indigo-200 font-medium">${r.adminComments}</span>` : '<span class="text-slate-500 italic">No reply yet</span>'}</td>
+                                <td class="px-4 py-3 text-slate-800 text-xs">${r.adminComments ? `<span class="bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-xl block text-indigo-700 font-medium">${r.adminComments}</span>` : '<span class="text-slate-400 italic">No reply yet</span>'}</td>
                             </tr>
                         `).join('');
                     }
                 }
             } catch (err) {
-                console.error("Failed to fetch employee requests", err);
+                console.error("Failed to fetch requests", err);
             }
         }
 
@@ -915,7 +956,7 @@
                 });
                 const res = await response.json();
                 if (res.status === "success") {
-                    showToast("Success", "Request status and comments updated.");
+                    showToast("Success", "Request updated.");
                     closeReviewModal();
                     loadAdminData();
                 } else {
@@ -970,7 +1011,7 @@
             const manualTotalHours = document.getElementById("editManualHours").value.trim();
             const btn = document.getElementById("saveEditBtn");
 
-            btn.innerText = "Saving Changes...";
+            btn.innerText = "Saving...";
             btn.disabled = true;
 
             try {
@@ -981,7 +1022,7 @@
                 });
                 const res = await response.json();
                 if (res.status === "success") {
-                    showToast("Success", "Shift record & overtime adjusted.");
+                    showToast("Success", "Shift record adjusted.");
                     closeEditModal();
                     loadAdminData();
                 } else {
@@ -1018,16 +1059,16 @@
                 });
                 const res = await response.json();
                 if (res.status === "success") {
-                    showToast("Success", "Manual attendance record added.");
+                    showToast("Success", "Record added.");
                     closeAddModal();
                     loadAdminData();
                 } else {
                     showToast("Error", res.message, true);
                 }
             } catch (err) {
-                showToast("Error", "Failed to add manual record.", true);
+                showToast("Error", "Failed to add record.", true);
             } finally {
-                btn.innerText = "Insert Attendance Record";
+                btn.innerText = "Insert Record";
                 btn.disabled = false;
             }
         }
@@ -1052,27 +1093,18 @@
             });
 
             const btn = document.getElementById("createEmpBtn");
-            btn.innerText = "Provisioning Secure Account...";
+            btn.innerText = "Provisioning...";
             btn.disabled = true;
 
             try {
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ 
-                        action: "createEmployee", 
-                        adminEmail: sessionUser.email,
-                        email, 
-                        password, 
-                        fullName, 
-                        role,
-                        weeklySchedule,
-                        token: sessionUser.token 
-                    })
+                    body: JSON.stringify({ action: "createEmployee", adminEmail: sessionUser.email, email, password, fullName, role, weeklySchedule, token: sessionUser.token })
                 });
                 const res = await response.json();
                 if (res.status === "success") {
-                    showToast("Success", "Account and weekly schedule provisioned!");
+                    showToast("Success", "Account provisioned!");
                     document.getElementById("createEmployeeForm").reset();
                     renderWeeklyScheduleBuilder();
                 } else {
@@ -1081,7 +1113,7 @@
             } catch (err) {
                 showToast("Error", "Failed to provision employee.", true);
             } finally {
-                btn.innerText = "Provision Secure Account & Weekly Schedule";
+                btn.innerText = "Provision Account & Schedule";
                 btn.disabled = false;
             }
         }
@@ -1091,11 +1123,10 @@
                 const response = await fetch(`${API_URL}?action=getStatus&email=${encodeURIComponent(sessionUser.email)}`);
                 const res = await response.json();
                 if (res.status === "success" && res.data) {
-                    const status = res.data.currentStatus;
-                    document.getElementById("statusBadge").innerText = status.toUpperCase();
+                    document.getElementById("statusBadge").innerText = res.data.currentStatus.toUpperCase();
                 }
             } catch (err) {
-                console.error("Could not fetch status", err);
+                console.error("Status fetch error", err);
             }
         }
 
@@ -1109,38 +1140,28 @@
                 const el = document.getElementById(`content-${t}`);
                 if(el) el.classList.add('hidden');
                 const btn = document.getElementById(`tab-${t}`);
-                if(btn) btn.className = btn.className.replace('border-indigo-500 text-indigo-400 font-semibold', 'border-transparent text-slate-400 font-medium').replace('border-amber-500 text-amber-400 font-semibold', 'border-transparent text-slate-400 font-medium');
+                if(btn) btn.className = btn.className.replace('border-indigo-600 text-indigo-600 font-semibold', 'border-transparent text-slate-600 font-medium').replace('border-amber-600 text-amber-600 font-semibold', 'border-transparent text-slate-600 font-medium');
             });
             document.getElementById(`content-${tab}`).classList.remove('hidden');
             const activeBtn = document.getElementById(`tab-${tab}`);
             
             if(tab === 'admin') {
-                activeBtn.className = "tab-btn py-4 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 flex items-center space-x-2 cursor-pointer whitespace-nowrap";
+                activeBtn.className = "tab-btn py-4 text-xs sm:text-sm font-semibold border-b-2 border-amber-600 text-amber-600 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0";
                 loadAdminData();
             } else {
-                activeBtn.className = "tab-btn py-4 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 flex items-center space-x-2 cursor-pointer whitespace-nowrap";
-                if(tab === 'requests') {
-                    fetchEmployeeRequests();
-                } else if(tab === 'library') {
-                    fetchLibrary();
-                }
+                activeBtn.className = "tab-btn py-4 text-xs sm:text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 flex items-center space-x-2 cursor-pointer whitespace-nowrap shrink-0";
+                if(tab === 'requests') fetchEmployeeRequests();
+                else if(tab === 'library') fetchLibrary();
             }
         }
 
         async function submitAttendance(type) {
-            showToast("Syncing...", "Recording attendance securely...");
+            showToast("Syncing...", "Recording attendance...");
             try {
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ 
-                        action: "attendance", 
-                        email: sessionUser.email, 
-                        token: sessionUser.token, 
-                        userIp: currentUserIp,
-                        deviceId: deviceId,
-                        type 
-                    })
+                    body: JSON.stringify({ action: "attendance", email: sessionUser.email, token: sessionUser.token, userIp: currentUserIp, deviceId, type })
                 });
                 const res = await response.json();
                 if (res.status === "success") {
@@ -1161,25 +1182,18 @@
             const details = document.getElementById("requestDetails").value;
             const btn = document.getElementById("reqBtn");
 
-            btn.innerText = "Sending Request...";
+            btn.innerText = "Sending...";
             btn.disabled = true;
 
             try {
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ 
-                        action: "request", 
-                        email: sessionUser.email, 
-                        token: sessionUser.token, 
-                        requestType, 
-                        managerEmail, 
-                        details 
-                    })
+                    body: JSON.stringify({ action: "request", email: sessionUser.email, token: sessionUser.token, requestType, managerEmail, details })
                 });
                 const res = await response.json();
                 if (res.status === "success") {
-                    showToast("Request Sent", "Successfully logged securely!");
+                    showToast("Request Sent", "Successfully logged!");
                     document.getElementById("requestForm").reset();
                     fetchEmployeeRequests();
                 } else {
@@ -1213,9 +1227,9 @@
                 const btn = document.getElementById(`catPill-${cat}`);
                 if (btn) {
                     if (cat === category) {
-                        btn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-md transition cursor-pointer whitespace-nowrap";
+                        btn.className = "px-4 py-2 rounded-2xl text-xs font-bold bg-indigo-600 text-white shadow-md transition cursor-pointer whitespace-nowrap shrink-0";
                     } else {
-                        btn.className = "px-4 py-2 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer whitespace-nowrap border border-slate-700";
+                        btn.className = "px-4 py-2 rounded-2xl text-xs font-medium clay-card-sm text-slate-700 hover:text-slate-900 transition cursor-pointer whitespace-nowrap shrink-0";
                     }
                 }
             });
@@ -1249,29 +1263,29 @@
                 const readUrl = item.ReadUrl && item.ReadUrl.trim() !== "" ? item.ReadUrl : "#";
                 
                 return `
-                    <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-lg hover:border-indigo-500/50 transition flex flex-col group">
-                        <div class="h-52 bg-slate-800 flex items-center justify-center relative overflow-hidden">
+                    <div class="clay-card overflow-hidden transition flex flex-col group">
+                        <div class="h-48 bg-[#dde4f6] flex items-center justify-center relative overflow-hidden">
                             ${item.CoverUrl && item.CoverUrl.trim() !== "" ? 
                                 `<img src="${item.CoverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="Cover">` : 
-                                `<i class="fa-solid fa-book-open text-5xl text-slate-600 group-hover:text-indigo-400 transition"></i>`
+                                `<i class="fa-solid fa-book-open text-5xl text-slate-400 group-hover:text-indigo-600 transition"></i>`
                             }
-                            <span class="absolute top-3 right-3 bg-slate-950/90 text-indigo-400 text-xs font-bold px-3 py-1 rounded-full border border-slate-700 shadow-md">
+                            <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-indigo-300 text-xs font-bold px-3 py-1 rounded-full shadow-md">
                                 ${categoryTag}
                             </span>
                         </div>
                         <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
                             <div>
-                                <h3 class="font-bold text-white text-base leading-snug line-clamp-1">${item.Title || 'Untitled'}</h3>
-                                <p class="text-xs text-indigo-400 font-medium mt-1"><i class="fa-solid fa-pen-nib mr-1"></i>${item.Author || 'Unknown Author'}</p>
-                                <p class="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">${item.Description || 'No description provided.'}</p>
+                                <h3 class="font-bold text-slate-900 text-base leading-snug truncate">${item.Title || 'Untitled'}</h3>
+                                <p class="text-xs text-indigo-600 font-semibold mt-1 truncate"><i class="fa-solid fa-pen-nib mr-1"></i>${item.Author || 'Unknown Author'}</p>
+                                <p class="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">${item.Description || 'No description provided.'}</p>
                             </div>
-                            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                                <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Digital Copy</span>
+                            <div class="pt-3 border-t border-slate-300/60 flex items-center justify-between">
+                                <span class="text-[11px] text-slate-500 font-bold uppercase tracking-wider">Digital Copy</span>
                                 ${readUrl !== "#" ? 
-                                    `<a href="${readUrl}" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shadow-md shadow-indigo-600/20 flex items-center space-x-1.5">
-                                        <span>Read / View</span><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    `<a href="${readUrl}" target="_blank" class="clay-button px-3.5 py-1.5 text-xs font-semibold flex items-center space-x-1.5">
+                                        <span>Read</span><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                                     </a>` : 
-                                    `<span class="text-xs text-slate-500 italic">Link Pending</span>`
+                                    `<span class="text-xs text-slate-400 italic">Pending</span>`
                                 }
                             </div>
                         </div>
@@ -1280,14 +1294,5 @@
             }).join('');
         }
     </script>
-    <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Service Worker registered successfully!', reg))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    });
-  }
-</script>
 </body>
 </html>
